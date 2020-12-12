@@ -1,6 +1,4 @@
-package com.tcs.productrestapi.model;
-
-import java.util.Date;
+package com.tcs.pricerestapi.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,18 +13,18 @@ import lombok.NoArgsConstructor;
 
 
 @Entity
-@Table(name = "product_tbl")
+@Table(name = "price_tbl")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Product {
+public class Price {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "product_id")
+	@Column(name = "price_id")
+	private int priceId;
 	private int productId;
-	private String productName;
-	private String description;
-	private String category;
-	private Date expiryDate;
+	private int priceValue;
 }
+
+
