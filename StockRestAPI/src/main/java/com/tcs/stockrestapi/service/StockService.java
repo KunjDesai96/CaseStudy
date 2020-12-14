@@ -1,6 +1,5 @@
 package com.tcs.stockrestapi.service;
 
-import java.util.List;
 import java.util.Optional;
 import com.tcs.stockrestapi.model.Stock;
 
@@ -11,4 +10,5 @@ public interface StockService {
 	public void deleteStock(int id);
 	public Optional<java.util.List<Stock>> getStocks();
 	public String findByProductId(int productId);
+	public boolean prouductExists(int productId); 
 }

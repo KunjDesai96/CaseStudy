@@ -1,10 +1,8 @@
 package com.tcs.pricerestapi.controller;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -24,6 +22,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.tcs.pricerestapi.exception.InvalidPriceException;
 import com.tcs.pricerestapi.exception.PriceIdNotFoundException;
+import com.tcs.pricerestapi.exception.ProductIdNotFoundException;
 import com.tcs.pricerestapi.model.Price;
 import com.tcs.pricerestapi.service.PriceService;
 
@@ -48,9 +47,11 @@ public class PriceController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> createOrUpdatePrice(@RequestBody Price price,UriComponentsBuilder uriComponentsBuilder,HttpServletRequest request) throws InvalidPriceException {
-		String product = priceService.findByProductId(price.getProductId());
-		System.out.println(product);
+	public ResponseEntity<?> createOrUpdatePrice(@RequestBody Price price,UriComponentsBuilder uriComponentsBuilder,HttpServletRequest request) throws InvalidPriceException, ProductIdNotFoundException {
+		if((priceService.findByProductId(price.getProductId()))== null)
+			throw new ProductIdNotFoundException("Product not found");
+		if(priceService.prouductExists(price.getProductId()))
+			throw new InvalidPriceException("Price for the product already exists");
 		if(price.getPriceValue()<=0)
 			throw new InvalidPriceException("Invalid Price Value");
 		Price price2 = priceService.createOrUpdatePrice(price);
@@ -72,7 +73,9 @@ public class PriceController {
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<Price> updatePrice(@PathVariable("id") Integer id,
-			@Valid @RequestBody Price price ) throws PriceIdNotFoundException, InvalidPriceException {
+			@Valid @RequestBody Price price ) throws PriceIdNotFoundException, InvalidPriceException, ProductIdNotFoundException {
+		if((priceService.findByProductId(price.getProductId()))== null)
+			throw new ProductIdNotFoundException("Product not found");
 		priceService.getPriceById(id)
 				.orElseThrow(()-> new PriceIdNotFoundException("Price not found"));
 		if(price.getPriceValue()<=0)

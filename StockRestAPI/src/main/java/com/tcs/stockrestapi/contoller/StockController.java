@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
-
 import com.tcs.stockrestapi.exception.InvalidQuantityException;
+import com.tcs.stockrestapi.exception.ProductIdNotFoundException;
 import com.tcs.stockrestapi.exception.StockIdNotFoundException;
 import com.tcs.stockrestapi.model.Stock;
 import com.tcs.stockrestapi.service.StockService;
@@ -43,7 +43,11 @@ public class StockController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> createOrUpdateStock(@RequestBody Stock stock,UriComponentsBuilder uriComponentsBuilder,HttpServletRequest request) throws InvalidQuantityException {
+	public ResponseEntity<?> createOrUpdateStock(@RequestBody Stock stock,UriComponentsBuilder uriComponentsBuilder,HttpServletRequest request) throws InvalidQuantityException, ProductIdNotFoundException {
+		if((stockService.findByProductId(stock.getProductId()))== null)
+			throw new ProductIdNotFoundException("Product not found");
+		if(stockService.prouductExists(stock.getProductId()))
+			throw new InvalidQuantityException("Quantity for the product already exists");
 		if(stock.getQuantity()<=0)
 			throw new InvalidQuantityException("Invalid Quantity Value");
 		Stock stock2 = stockService.createOrUpdateStock(stock);
@@ -65,7 +69,9 @@ public class StockController {
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<Stock> updateStock(@PathVariable("id") Integer id,
-			@Valid @RequestBody Stock stock ) throws StockIdNotFoundException, InvalidQuantityException {
+			@Valid @RequestBody Stock stock ) throws StockIdNotFoundException, InvalidQuantityException, ProductIdNotFoundException {
+		if((stockService.findByProductId(stock.getProductId()))== null)
+			throw new ProductIdNotFoundException("Product not found");
 		stockService.getStockById(id)
 				.orElseThrow(()-> new StockIdNotFoundException("Stock not found"));
 		if(stock.getQuantity()<=0)

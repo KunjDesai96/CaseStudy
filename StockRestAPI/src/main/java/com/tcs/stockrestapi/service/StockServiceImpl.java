@@ -64,4 +64,14 @@ public class StockServiceImpl implements StockService {
 
 	}
 
+	@Override
+	public boolean prouductExists(int productId) {
+		// TODO Auto-generated method stub
+		Stock stock = stockRepository.findByProductId(productId);
+		if(stock!= null)
+			return true;
+		else 
+			return false;
+	}
+
 }

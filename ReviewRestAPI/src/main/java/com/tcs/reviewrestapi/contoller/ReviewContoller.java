@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.tcs.reviewrestapi.exception.ProductIdNotFoundException;
 import com.tcs.reviewrestapi.exception.ReviewIdNotFoundException;
 import com.tcs.reviewrestapi.model.Review;
 import com.tcs.reviewrestapi.service.ReviewService;
@@ -43,7 +44,9 @@ public class ReviewContoller {
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> createOrUpdateReview(@RequestBody Review review,UriComponentsBuilder uriComponentsBuilder,HttpServletRequest request) {
+	public ResponseEntity<?> createOrUpdateReview(@RequestBody Review review,UriComponentsBuilder uriComponentsBuilder,HttpServletRequest request) throws ProductIdNotFoundException {
+		if((reviewService.findByProductId(review.getProductId()))== null)
+			throw new ProductIdNotFoundException("Product not found");
 		Review review2 = reviewService.createOrUpdateReview(review);
 		UriComponents uriComponents = uriComponentsBuilder
 				.path(request.getRequestURI()+"/{id}")
@@ -63,7 +66,9 @@ public class ReviewContoller {
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<Review> updateReview(@PathVariable("id") Integer id,
-			@Valid @RequestBody Review review ) throws ReviewIdNotFoundException {
+			@Valid @RequestBody Review review ) throws ReviewIdNotFoundException, ProductIdNotFoundException {
+		if((reviewService.findByProductId(review.getProductId()))== null)
+			throw new ProductIdNotFoundException("Product not found");
 		reviewService.getReviewById(id)
 				.orElseThrow(()-> new ReviewIdNotFoundException("Review not found"));
 		review.setReviewId(id);

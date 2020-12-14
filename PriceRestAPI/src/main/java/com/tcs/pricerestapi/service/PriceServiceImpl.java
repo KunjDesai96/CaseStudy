@@ -9,11 +9,9 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
-
 import com.tcs.pricerestapi.model.Price;
 import com.tcs.pricerestapi.repository.PriceRepository;
 
@@ -59,7 +57,22 @@ public class PriceServiceImpl implements PriceService {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
 		HttpEntity<String> entity = new HttpEntity<String>(headers);
-		return restTemplate.exchange("http://localhost:9006/api/v1/product/"+productId, HttpMethod.GET, entity, String.class).getBody();
+		try {
+			return restTemplate.exchange("http://localhost:9006/api/v1/product/"+productId, HttpMethod.GET, entity, String.class).getBody();
+		}
+		catch(Exception e){
+			return null;
+		}
+	}
+
+	@Override
+	public boolean prouductExists(int productId) {
+		// TODO Auto-generated method stub
+		Price price = priceRepository.findByProductId(productId);
+		if(price!= null)
+			return true;
+		else 
+			return false;
 	}
 
 }
