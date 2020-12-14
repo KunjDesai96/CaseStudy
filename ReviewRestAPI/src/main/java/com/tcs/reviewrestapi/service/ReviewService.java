@@ -12,5 +12,5 @@ public interface ReviewService {
 	public Optional<Review> getReviewById(int id);
 	public void deleteReview(int id);
 	public Optional<List<Review>> getReviews();
-	public List<Review> findByProductId(int productId);
+	public String findByProductId(int productId);
 }

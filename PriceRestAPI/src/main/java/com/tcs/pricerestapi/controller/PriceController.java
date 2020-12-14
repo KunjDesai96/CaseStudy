@@ -49,7 +49,7 @@ public class PriceController {
 	
 	@PostMapping
 	public ResponseEntity<?> createOrUpdatePrice(@RequestBody Price price,UriComponentsBuilder uriComponentsBuilder,HttpServletRequest request) throws InvalidPriceException {
-		ResponseEntity<String> product =  priceService.findByProductId(price.getProductId());
+		String product = priceService.findByProductId(price.getProductId());
 		System.out.println(product);
 		if(price.getPriceValue()<=0)
 			throw new InvalidPriceException("Invalid Price Value");

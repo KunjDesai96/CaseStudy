@@ -10,5 +10,5 @@ public interface StockService {
 	public Optional<Stock> getStockById(int id);
 	public void deleteStock(int id);
 	public Optional<java.util.List<Stock>> getStocks();
-	public List<Stock> findByProductId(int productId);
+	public String findByProductId(int productId);
 }

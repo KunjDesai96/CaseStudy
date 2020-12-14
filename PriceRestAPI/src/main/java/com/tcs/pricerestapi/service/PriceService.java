@@ -14,6 +14,6 @@ public interface PriceService {
 	public Optional<Price> getPriceById(int id);
 	public void deletePrice(int id);
 	public Optional<List<Price>>  getPrices();
-	public ResponseEntity<String> findByProductId(int productId);
+	public String findByProductId(int productId);
 }
 

@@ -1,10 +1,15 @@
 package com.tcs.stockrestapi.service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.web.client.RestTemplate;
 
 import com.tcs.stockrestapi.model.Stock;
 import com.tcs.stockrestapi.respository.StockRepository;
@@ -13,6 +18,9 @@ public class StockServiceImpl implements StockService {
 
 	@Autowired
 	StockRepository stockRepository;
+	
+	@Autowired
+	RestTemplate restTemplate;
 	
 	@Override
 	public Stock createOrUpdateStock(Stock stock) {
@@ -47,9 +55,13 @@ public class StockServiceImpl implements StockService {
 	}
 
 	@Override
-	public List<Stock> findByProductId(int productId) {
+	public String findByProductId(int productId) {
 		// TODO Auto-generated method stub
-		return null;
+		HttpHeaders headers = new HttpHeaders();
+		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+		HttpEntity<String> entity = new HttpEntity<String>(headers);
+		return restTemplate.exchange("http://localhost:9006/api/v1/product/"+productId, HttpMethod.GET, entity, String.class).getBody();
+
 	}
 
 }

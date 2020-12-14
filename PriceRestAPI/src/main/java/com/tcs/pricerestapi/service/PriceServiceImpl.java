@@ -17,27 +17,25 @@ import org.springframework.web.client.RestTemplate;
 import com.tcs.pricerestapi.model.Price;
 import com.tcs.pricerestapi.repository.PriceRepository;
 
-
-
 @Transactional
 @Service
 public class PriceServiceImpl implements PriceService {
 
 	@Autowired
 	PriceRepository priceRepository;
-	RestTemplate restTemplate;
 	
+	@Autowired
+	RestTemplate restTemplate;
+
 	@Override
-	public Price createOrUpdatePrice(Price price) {	
+	public Price createOrUpdatePrice(Price price) {
 		try {
 			return priceRepository.save(price);
-		} catch (Exception e) {	
+		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
-
-
 
 	@Override
 	public void deletePrice(int id) {
@@ -50,22 +48,18 @@ public class PriceServiceImpl implements PriceService {
 		return priceRepository.findById(id);
 	}
 
-
-
 	@Override
 	public Optional<List<Price>> getPrices() {
 		// TODO Auto-generated method stub
 		return Optional.ofNullable(priceRepository.findAll());
 	}
 
-
-
 	@Override
-	public ResponseEntity<String> findByProductId(int productId) {
-		// TODO Auto-generated method stub
-		return restTemplate.getForEntity("http://localhost:9006/api/v1/product/"+productId, String.class);
+	public String findByProductId(int productId) {
+		HttpHeaders headers = new HttpHeaders();
+		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+		HttpEntity<String> entity = new HttpEntity<String>(headers);
+		return restTemplate.exchange("http://localhost:9006/api/v1/product/"+productId, HttpMethod.GET, entity, String.class).getBody();
 	}
-
-
 
 }
