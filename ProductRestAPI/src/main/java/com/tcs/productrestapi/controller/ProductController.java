@@ -31,8 +31,7 @@ import com.tcs.productrestapi.service.ProductService;
 public class ProductController {
 	@Autowired
 	ProductService productService;
-	
-	
+		
 	@GetMapping
 	public List<Product> getProducts() {
 		return productService.getProducts().get();
@@ -49,7 +48,7 @@ public class ProductController {
 	public ResponseEntity<?> createOrUpdateProduct(@RequestBody Product product,UriComponentsBuilder uriComponentsBuilder,HttpServletRequest request) throws ExpiryDateException {
 		Date date = new Date();
 		if(product.getExpiryDate().before(date))
-			throw new ExpiryDateException("Invalid Date");
+			throw new ExpiryDateException("Invalid Expiry Date");
 		Product product2 = productService.createOrUpdateProduct(product);
 		UriComponents uriComponents = uriComponentsBuilder
 				.path(request.getRequestURI()+"/{id}")
@@ -78,11 +77,9 @@ public class ProductController {
 				.orElseThrow(()-> new ProductIdNotFoundException("Product not found"));
 		Date date = new Date();
 		if(product.getExpiryDate().before(date))
-			throw new ExpiryDateException("Invalid Date");
+			throw new ExpiryDateException("Invalid Expiry Date");
 		product.setProductId(id);
-		Product product3 = productService.createOrUpdateProduct(product);
-		
-		return ResponseEntity.ok(product3);
+		return ResponseEntity.ok( productService.createOrUpdateProduct(product));
 	}
 	
 	
