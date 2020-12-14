@@ -11,10 +11,7 @@ import com.tcs.productrestapi.repository.ProductRepository;
 
 @Service
 public class ProductServiceImpl implements ProductService {
-// applying singleton 
-	// task for u
-	
-	
+
 	@Autowired
 	ProductRepository productRepository;
 	
@@ -35,9 +32,7 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public Optional<Product> getProductById(int id) {
 		// TODO Auto-generated method stub
-		
-		
-		return productRepository.findById(id);
+			return productRepository.findById(id);
 	}
 
 	@Override
@@ -56,7 +51,6 @@ public class ProductServiceImpl implements ProductService {
 	public Optional<List<Product>> getProductsByCategory(String catName) {
 		// TODO Auto-generated method stub
 		return Optional.ofNullable(productRepository.findByCategory(catName));
-		//return null;
 	}
 
 }

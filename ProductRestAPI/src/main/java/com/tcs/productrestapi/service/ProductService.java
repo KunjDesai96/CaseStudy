@@ -5,7 +5,6 @@ import java.util.Optional;
 import com.tcs.productrestapi.model.Product;
 
 public interface ProductService {
-	
 	public Product createOrUpdateProduct(Product product);
 	public Optional<Product> getProductById(int id);
 	public void deleteProduct(int id);

@@ -1,4 +1,4 @@
-package com.tcs.reviewrestapi.exceptions;
+package com.tcs.pricerestapi.exception;
 
 import java.util.Date;
 

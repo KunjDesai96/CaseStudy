@@ -60,7 +60,6 @@ public class ProductController {
 	}
 	
 	@DeleteMapping("/{id}")
-
 	public Map<String, Boolean> deleteProductById(@PathVariable int id) throws ProductIdNotFoundException { 
 		productService.getProductById(id).orElseThrow(()-> new ProductIdNotFoundException("Product not found"));
 		

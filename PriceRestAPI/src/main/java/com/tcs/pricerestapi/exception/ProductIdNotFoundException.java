@@ -1,4 +1,4 @@
-package com.tcs.pricerestapi.exceptions;
+package com.tcs.pricerestapi.exception;
 
 public class ProductIdNotFoundException extends Exception {
 

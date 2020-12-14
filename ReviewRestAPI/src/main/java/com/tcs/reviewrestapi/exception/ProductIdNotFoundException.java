@@ -1,4 +1,4 @@
-package com.tcs.reviewrestapi.exceptions;
+package com.tcs.reviewrestapi.exception;
 
 public class ProductIdNotFoundException extends Exception {
 
