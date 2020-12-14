@@ -1,5 +1,7 @@
 package com.tcs.productrestapi.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -40,14 +42,15 @@ public class ProductController {
 	@GetMapping("/{id}")
 	public ResponseEntity<Product> getProductById(@PathVariable("id") int productId) throws ProductIdNotFoundException {
 		Product product = productService.getProductById(productId).orElseThrow(()-> new ProductIdNotFoundException("Product not found"));
-		
 		return ResponseEntity.ok().body(product);
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> createOrUpdateProduct(@RequestBody Product product,UriComponentsBuilder uriComponentsBuilder,HttpServletRequest request) throws ExpiryDateException {
-		Date date = new Date();
-		if(product.getExpiryDate().before(date))
+	public ResponseEntity<?> createOrUpdateProduct(@RequestBody Product product,UriComponentsBuilder uriComponentsBuilder,HttpServletRequest request) throws ExpiryDateException, ParseException {
+		Date expiryDate = new SimpleDateFormat("dd/MM/yyyy").parse(product.getExpiryDate()); 
+		String now = new SimpleDateFormat("dd/MM/yyyy").format(new Date()); 
+		Date today = new SimpleDateFormat("dd/MM/yyyy").parse(now);
+		if(expiryDate.before(today))
 			throw new ExpiryDateException("Invalid Expiry Date");
 		Product product2 = productService.createOrUpdateProduct(product);
 		UriComponents uriComponents = uriComponentsBuilder
@@ -55,7 +58,7 @@ public class ProductController {
 				.buildAndExpand(product2.getProductId());
 		
 		
-	  return 	 ResponseEntity.created(uriComponents.toUri()).body(product2);
+	  return ResponseEntity.created(uriComponents.toUri()).body(product2);
 	}
 	
 	@DeleteMapping("/{id}")
@@ -72,11 +75,13 @@ public class ProductController {
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<Product> updateProduct(@PathVariable("id") Integer id,
-			@Valid @RequestBody Product product ) throws ProductIdNotFoundException, ExpiryDateException {
+			@Valid @RequestBody Product product ) throws ProductIdNotFoundException, ExpiryDateException, ParseException {
 		productService.getProductById(id)
 				.orElseThrow(()-> new ProductIdNotFoundException("Product not found"));
-		Date date = new Date();
-		if(product.getExpiryDate().before(date))
+		Date expiryDate = new SimpleDateFormat("dd/MM/yyyy").parse(product.getExpiryDate()); 
+		String now = new SimpleDateFormat("dd/MM/yyyy").format(new Date()); 
+		Date today = new SimpleDateFormat("dd/MM/yyyy").parse(now);
+		if(expiryDate.before(today))
 			throw new ExpiryDateException("Invalid Expiry Date");
 		product.setProductId(id);
 		return ResponseEntity.ok( productService.createOrUpdateProduct(product));

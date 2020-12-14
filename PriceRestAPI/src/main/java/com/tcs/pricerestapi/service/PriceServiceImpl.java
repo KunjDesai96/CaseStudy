@@ -1,11 +1,18 @@
 package com.tcs.pricerestapi.service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import com.tcs.pricerestapi.model.Price;
 import com.tcs.pricerestapi.repository.PriceRepository;
@@ -18,6 +25,7 @@ public class PriceServiceImpl implements PriceService {
 
 	@Autowired
 	PriceRepository priceRepository;
+	RestTemplate restTemplate;
 	
 	@Override
 	public Price createOrUpdatePrice(Price price) {	
@@ -53,9 +61,9 @@ public class PriceServiceImpl implements PriceService {
 
 
 	@Override
-	public List<Price> findByProductId(int productId) {
+	public ResponseEntity<String> findByProductId(int productId) {
 		// TODO Auto-generated method stub
-		return null;
+		return restTemplate.getForEntity("http://localhost:9006/api/v1/product/"+productId, String.class);
 	}
 
 

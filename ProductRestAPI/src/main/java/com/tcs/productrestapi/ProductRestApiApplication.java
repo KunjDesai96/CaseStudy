@@ -11,6 +11,7 @@ public class ProductRestApiApplication {
 
 	public static void main(String[] args) {
 		ApplicationContext applicationContext =  SpringApplication.run(ProductRestApiApplication.class, args);
+		applicationContext.getBean(RestTemplate.class);
 	}
 
 	@Bean

@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -48,6 +49,8 @@ public class PriceController {
 	
 	@PostMapping
 	public ResponseEntity<?> createOrUpdatePrice(@RequestBody Price price,UriComponentsBuilder uriComponentsBuilder,HttpServletRequest request) throws InvalidPriceException {
+		ResponseEntity<String> product =  priceService.findByProductId(price.getProductId());
+		System.out.println(product);
 		if(price.getPriceValue()<=0)
 			throw new InvalidPriceException("Invalid Price Value");
 		Price price2 = priceService.createOrUpdatePrice(price);
