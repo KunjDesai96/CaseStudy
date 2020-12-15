@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,20 +34,17 @@ public class PriceController {
 	PriceService priceService;
 		
 	@GetMapping
-	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
 	public List<Price> getPrice() {
 		return priceService.getPrices().get();
 	}
 	
 	@GetMapping("/{id}")
-	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
 	public ResponseEntity<Price> getPriceById(@PathVariable("id") int priceId) throws PriceIdNotFoundException {
 		Price price = priceService.getPriceById(priceId).orElseThrow(()-> new PriceIdNotFoundException("Price not found"));
 		return ResponseEntity.ok().body(price);
 	}
 	
 	@PostMapping
-	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> createOrUpdatePrice(@RequestBody Price price,UriComponentsBuilder uriComponentsBuilder,HttpServletRequest request) throws InvalidPriceException, ProductIdNotFoundException {
 		if((priceService.findByProductId(price.getProductId()))== null)
 			throw new ProductIdNotFoundException("Product not found");
@@ -64,7 +60,6 @@ public class PriceController {
 	}
 	
 	@DeleteMapping("/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
 	public Map<String, Boolean> deletePriceById(@PathVariable int id) throws PriceIdNotFoundException { 
 		priceService.getPriceById(id).orElseThrow(()-> new PriceIdNotFoundException("Price not found"));
 		priceService.deletePrice(id);
@@ -75,7 +70,6 @@ public class PriceController {
 	
 	
 	@PutMapping("/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<Price> updatePrice(@PathVariable("id") Integer id,
 			@Valid @RequestBody Price price ) throws PriceIdNotFoundException, InvalidPriceException, ProductIdNotFoundException {
 		if((priceService.findByProductId(price.getProductId()))== null)

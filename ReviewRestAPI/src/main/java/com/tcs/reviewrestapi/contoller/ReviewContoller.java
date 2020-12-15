@@ -9,7 +9,6 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,20 +35,17 @@ public class ReviewContoller {
 	ReviewService reviewService;
 		
 	@GetMapping
-	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
 	public List<Review> getReview() {
 		return reviewService.getReviews().get();
 	}
 	
 	@GetMapping("/{id}")
-	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
 	public ResponseEntity<Review> getReviewById(@PathVariable("id") int reviewId) throws ReviewIdNotFoundException {
 		Review review = reviewService.getReviewById(reviewId).orElseThrow(()-> new ReviewIdNotFoundException("Review not found"));
 		return ResponseEntity.ok().body(review);
 	}
 	
 	@PostMapping
-	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<?> createOrUpdateReview(@RequestBody Review review,UriComponentsBuilder uriComponentsBuilder,HttpServletRequest request) throws ProductIdNotFoundException {
 		if((reviewService.findByProductId(review.getProductId()))== null)
 			throw new ProductIdNotFoundException("Product not found");
@@ -61,7 +57,6 @@ public class ReviewContoller {
 	}
 	
 	@DeleteMapping("/{id}")
-	@PreAuthorize("hasRole('USER')")
 	public Map<String, Boolean> deleteReviewById(@PathVariable int id) throws ReviewIdNotFoundException { 
 		reviewService.getReviewById(id).orElseThrow(()-> new ReviewIdNotFoundException("Review not found"));
 		reviewService.deleteReview(id);
@@ -72,7 +67,6 @@ public class ReviewContoller {
 	
 	
 	@PutMapping("/{id}")
-	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<Review> updateReview(@PathVariable("id") Integer id,
 			@Valid @RequestBody Review review ) throws ReviewIdNotFoundException, ProductIdNotFoundException {
 		if((reviewService.findByProductId(review.getProductId()))== null)

@@ -9,7 +9,6 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,20 +35,17 @@ public class StockController {
 	StockService stockService;
 		
 	@GetMapping
-	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
 	public List<Stock> getStock() {
 		return stockService.getStocks().get();
 	}
 	
 	@GetMapping("/{id}")
-	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
 	public ResponseEntity<Stock> getStockById(@PathVariable("id") int stockId) throws StockIdNotFoundException {
 		Stock stock = stockService.getStockById(stockId).orElseThrow(()-> new StockIdNotFoundException("Stock not found"));
 		return ResponseEntity.ok().body(stock);
 	}
 	
 	@PostMapping
-	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> createOrUpdateStock(@RequestBody Stock stock,UriComponentsBuilder uriComponentsBuilder,HttpServletRequest request) throws InvalidQuantityException, ProductIdNotFoundException {
 		if((stockService.findByProductId(stock.getProductId()))== null)
 			throw new ProductIdNotFoundException("Product not found");
@@ -65,7 +61,6 @@ public class StockController {
 	}
 	
 	@DeleteMapping("/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
 	public Map<String, Boolean> deleteStockById(@PathVariable int id) throws StockIdNotFoundException { 
 		stockService.getStockById(id).orElseThrow(()-> new StockIdNotFoundException("Stock not found"));
 		stockService.deleteStock(id);
@@ -76,7 +71,6 @@ public class StockController {
 	
 	
 	@PutMapping("/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<Stock> updateStock(@PathVariable("id") Integer id,
 			@Valid @RequestBody Stock stock ) throws StockIdNotFoundException, InvalidQuantityException, ProductIdNotFoundException {
 		if((stockService.findByProductId(stock.getProductId()))== null)
