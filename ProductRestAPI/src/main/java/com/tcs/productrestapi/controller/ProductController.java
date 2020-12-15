@@ -48,6 +48,10 @@ public class ProductController {
 		return ResponseEntity.ok().body(product);
 	}
 	
+	@GetMapping("/{name}")
+	public List<Product> getProductsByCategory(@PathVariable("name") String catName){
+		return productService.getProductsByCategory(catName).get();
+	}
 	@PostMapping
 	public ResponseEntity<?> createOrUpdateProduct(@RequestBody Product product,UriComponentsBuilder uriComponentsBuilder,HttpServletRequest request) throws ExpiryDateException, ParseException {
 		System.out.println("Its here!");
@@ -68,11 +72,9 @@ public class ProductController {
 	@DeleteMapping("/{id}")
 	public Map<String, Boolean> deleteProductById(@PathVariable int id) throws ProductIdNotFoundException { 
 		productService.getProductById(id).orElseThrow(()-> new ProductIdNotFoundException("Product not found"));
-		
 		productService.deleteProduct(id);
 		HashMap<String, Boolean> hashMap = new HashMap<>();
 		hashMap.put("deleted", Boolean.TRUE);
-		
 		return hashMap;
 	}
 	
