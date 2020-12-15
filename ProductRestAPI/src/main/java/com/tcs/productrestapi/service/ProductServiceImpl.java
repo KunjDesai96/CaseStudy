@@ -51,8 +51,8 @@ public class ProductServiceImpl implements ProductService {
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
 		HttpEntity<String> entity = new HttpEntity<String>(headers);
 		restTemplate.exchange("http://localhost:9008/api/v1/price/product/"+id, HttpMethod.DELETE, entity, String.class).getBody();
-		restTemplate.exchange("http://localhost:9009/api/v1/stock/product/"+id, HttpMethod.DELETE, entity, String.class).getBody();	
-		restTemplate.exchange("http://localhost:9007/api/v1/review/product/"+id, HttpMethod.DELETE, entity, String.class).getBody();
+		restTemplate.exchange("http://localhost:9007/api/v1/stock/product/"+id, HttpMethod.DELETE, entity, String.class).getBody();	
+		restTemplate.exchange("http://localhost:9009/api/v1/review/product/"+id, HttpMethod.DELETE, entity, String.class).getBody();
 		productRepository.deleteById(id);
 	}
 
