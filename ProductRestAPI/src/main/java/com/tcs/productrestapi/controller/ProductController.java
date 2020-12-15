@@ -48,13 +48,13 @@ public class ProductController {
 		return ResponseEntity.ok().body(product);
 	}
 	
-	@GetMapping("/{name}")
+	@GetMapping("/category/{name}")
 	public List<Product> getProductsByCategory(@PathVariable("name") String catName){
 		return productService.getProductsByCategory(catName).get();
 	}
+	
 	@PostMapping
 	public ResponseEntity<?> createOrUpdateProduct(@RequestBody Product product,UriComponentsBuilder uriComponentsBuilder,HttpServletRequest request) throws ExpiryDateException, ParseException {
-		System.out.println("Its here!");
 		Date expiryDate = new SimpleDateFormat("yyyy-MM-dd").parse(product.getExpiryDate()); 
 		String now = new SimpleDateFormat("yyyy-MM-dd").format(new Date()); 
 		Date today = new SimpleDateFormat("yyyy-MM-dd").parse(now);
