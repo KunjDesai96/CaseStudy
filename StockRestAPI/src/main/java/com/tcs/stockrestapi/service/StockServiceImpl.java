@@ -9,11 +9,15 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import com.tcs.stockrestapi.model.Stock;
 import com.tcs.stockrestapi.respository.StockRepository;
 
+@Transactional
+@Service
 public class StockServiceImpl implements StockService {
 
 	@Autowired

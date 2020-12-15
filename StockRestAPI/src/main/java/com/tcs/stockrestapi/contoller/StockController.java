@@ -33,7 +33,7 @@ import com.tcs.stockrestapi.service.StockService;
 public class StockController {
 	@Autowired
 	StockService stockService;
-		
+	
 	@GetMapping
 	public List<Stock> getStock() {
 		return stockService.getStocks().get();
