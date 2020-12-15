@@ -16,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import com.tcs.reviewrestapi.model.Review;
 import com.tcs.reviewrestapi.repository.ReviewRepository;
 
+
 @Transactional
 @Service
 public class ReviewServiceImpl implements ReviewService {
@@ -25,7 +26,7 @@ public class ReviewServiceImpl implements ReviewService {
 
 	@Autowired
 	RestTemplate restTemplate;
-	
+
 	@Override
 	public Review createOrUpdateReview(Review review) {
 		// TODO Auto-generated method stub
@@ -65,6 +66,32 @@ public class ReviewServiceImpl implements ReviewService {
 				.exchange("http://localhost:9006/api/v1/product/" + productId, HttpMethod.GET, entity, String.class)
 				.getBody();
 
+	}
+
+	@Override
+	public boolean deleteByProductId(int productId) {
+		// TODO Auto-generated method stub
+		List<Review> reviewL;
+		if(prouductExists(productId))
+		{
+			reviewL = reviewRepository.deleteByProductId(productId);
+			 if(reviewL.size()<=0)
+				 return false;
+			 else 
+				 return true;
+		}	
+		return true;
+
+	}
+
+	@Override
+	public boolean prouductExists(int productId) {
+		// TODO Auto-generated method stub
+		List<Review> stock = reviewRepository.findByProductId(productId);
+		if(stock!= null)
+			return true;
+		else 
+			return false;
 	}
 
 }

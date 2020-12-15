@@ -75,4 +75,19 @@ public class PriceServiceImpl implements PriceService {
 			return false;
 	}
 
+	@Override
+	public boolean deleteByProductId(int productId) {
+		// TODO Auto-generated method stub
+		List<Price> priceL;
+		if(prouductExists(productId))
+		{
+			priceL = priceRepository.deleteByProductId(productId);
+			 if(priceL.size()<=0)
+				 return false;
+			 else 
+				 return true;
+		}	
+		return true;
+	}
+
 }

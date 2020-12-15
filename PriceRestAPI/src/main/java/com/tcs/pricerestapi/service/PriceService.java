@@ -17,5 +17,6 @@ public interface PriceService {
 	public Optional<List<Price>>  getPrices();
 	public String findByProductId(int productId);
 	public boolean prouductExists(int productId); 
+	public boolean deleteByProductId(int productId);
 }
 

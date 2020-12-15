@@ -78,4 +78,19 @@ public class StockServiceImpl implements StockService {
 			return false;
 	}
 
+	@Override
+	public boolean deleteByProductId(int productId) {
+		// TODO Auto-generated method stub
+		List<Stock> stockL;
+		if(prouductExists(productId))
+		{
+			 stockL = stockRepository.deleteByProductId(productId);
+			 if(stockL.size()<=0)
+				 return false;
+			 else 
+				 return true;
+		}	
+		return true;
+	}
+
 }

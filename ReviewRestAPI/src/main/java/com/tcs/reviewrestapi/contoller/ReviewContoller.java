@@ -65,6 +65,15 @@ public class ReviewContoller {
 		return hashMap;
 	}
 	
+	@DeleteMapping("/product/{id}")
+	public Map<String, Boolean> deleteProductById(@PathVariable int id) { 
+		HashMap<String, Boolean> hashMap = new HashMap<>();
+		if(reviewService.deleteByProductId(id))
+			hashMap.put("deleted", Boolean.TRUE);
+		else
+			hashMap.put("deleted", Boolean.FALSE);
+		return hashMap;
+	}
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<Review> updateReview(@PathVariable("id") Integer id,

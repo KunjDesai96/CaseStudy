@@ -13,4 +13,6 @@ public interface ReviewService {
 	public void deleteReview(int id);
 	public Optional<List<Review>> getReviews();
 	public String findByProductId(int productId);
+	public boolean prouductExists(int productId); 
+	public boolean deleteByProductId(int productId);
 }

@@ -11,4 +11,5 @@ public interface StockService {
 	public Optional<java.util.List<Stock>> getStocks();
 	public String findByProductId(int productId);
 	public boolean prouductExists(int productId); 
+	public boolean deleteByProductId(int productId);
 }

@@ -67,7 +67,15 @@ public class PriceController {
 		hashMap.put("deleted", Boolean.TRUE);
 		return hashMap;
 	}
-	
+	@DeleteMapping("/product/{id}")
+	public Map<String, Boolean> deleteProductById(@PathVariable int id) { 
+		HashMap<String, Boolean> hashMap = new HashMap<>();
+		if(priceService.deleteByProductId(id))
+			hashMap.put("deleted", Boolean.TRUE);
+		else
+			hashMap.put("deleted", Boolean.FALSE);
+		return hashMap;
+	}
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<Price> updatePrice(@PathVariable("id") Integer id,
